@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        /* 按钮样式 */
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #409EFF;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* 按钮悬停时的样式 */
+        button:hover {
+            background-color: #79bbff;
+        }
+
+        textarea {
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+        }
+    </style>
+
+
+</head>
+<body>
+
+<div style="padding: 20px">
+    <p>ip地址输入</p>
+    <textarea id="textAreaValue" placeholder="请输入内容" rows="5" style="width: 300px"></textarea>
+    <button onclick="convertIP()">把ip地址自动分割加逗号</button>
+    <div>转换后的IP地址：</div>
+    <textarea id="convertIPValue"  rows="5" style="width: 300px"></textarea>
+    <button id="copyButton" >复制内容</button>
+</div>
+
+<script>
+    function reg(ip) {
+        const reg =
+            /^((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))$/;
+        let ipArray = ip.split("\n");
+        for (let i in ipArray) {
+            ipArray[i] = ipArray[i].replace(/\s/g, ""); //去掉数组元素的空格
+            if (!reg.test(ipArray[i])) {
+                //数组每个元素进行正则匹配
+                console.log(ipArray[i]); //可以打印出输入错误的IP
+                console.log("IP地址输入格式有误！");
+                return "IP地址输入格式有误"
+            }
+        }
+        let newIP = ipArray.join(); //转成字符串格式
+        return newIP;
+    }
+
+    function convertIP() {
+        let textAreaValue = document.getElementById("textAreaValue").value;
+        if (textAreaValue) {
+            document.getElementById("convertIPValue").innerHTML = reg(textAreaValue);
+        } else {
+            document.getElementById("convertIPValue").innerHTML = "";
+        }
+
+    }
+
+    document.getElementById('copyButton').addEventListener('click', function() {
+        // 获取要复制的文本框
+        let textToCopy = document.getElementById('convertIPValue').innerHTML;
+
+        var ctx = document.createElement("input");
+        ctx.setAttribute("value", textToCopy);
+        document.body.appendChild(ctx);
+        ctx.select();
+        document.execCommand("copy");
+        document.body.removeChild(ctx);
+    });
+</script>
+
+
+</body>
+</html>
